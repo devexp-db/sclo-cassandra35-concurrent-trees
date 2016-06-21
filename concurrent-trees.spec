@@ -1,6 +1,6 @@
 Name:          concurrent-trees
 Version:       2.5.0
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Concurrent Trees for Java
 License:       ASL 2.0
 URL:           https://github.com/npgall/%{name}/
@@ -32,6 +32,8 @@ rm documentation/images/dfs-comic.png
 %pom_remove_plugin :maven-release-plugin code
 %pom_remove_plugin :maven-gpg-plugin code
 %pom_remove_plugin :maven-javadoc-plugin code
+# fedora 25
+%pom_remove_plugin :maven-source-plugin code
 
 %mvn_file :%{name} %{name}
 
@@ -50,6 +52,9 @@ rm documentation/images/dfs-comic.png
 %license LICENSE.txt
 
 %changelog
+* Tue Jun 21 2016 Tomas Repik <trepik@redhat.com> - 2.5.0-2
+- remove maven-source-plugin causing failure
+
 * Thu Apr 21 2016 Tomas Repik <trepik@redhat.com> - 2.5.0-1
 - initial package
 
