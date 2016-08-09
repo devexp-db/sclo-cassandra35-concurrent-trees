@@ -1,14 +1,18 @@
-Name:          concurrent-trees
+%{?scl:%scl_package concurrent-trees}
+%{!?scl:%global pkg_name %{name}}
+
+Name:          %{?scl_prefix}concurrent-trees
 Version:       2.5.0
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       Concurrent Trees for Java
 License:       ASL 2.0
-URL:           https://github.com/npgall/%{name}/
-Source0:       https://github.com/npgall/%{name}/archive/%{version}.tar.gz
+URL:           https://github.com/npgall/%{pkg_name}/
+Source0:       https://github.com/npgall/%{pkg_name}/archive/%{version}.tar.gz
 
-BuildRequires: maven-local
-BuildRequires: mvn(junit:junit)
-BuildRequires: mvn(org.sonatype.oss:oss-parent:pom:)
+BuildRequires: %{?scl_mvn_prefix}maven-local
+BuildRequires: %{?scl_java_prefix}mvn(junit:junit)
+BuildRequires: %{?scl_mvn_prefix}mvn(org.sonatype.oss:oss-parent:pom:)
+%{?scl:Requires: %scl_runtime}
 
 BuildArch:     noarch
 
@@ -23,7 +27,8 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%setup -qn %{name}-%{version}
+%{?scl_enable}
+%setup -qn %{pkg_name}-%{version}
 rm -r documentation/javadoc
 rm -r documentation/documents
 rm documentation/images/dfs-comic.png
@@ -35,14 +40,18 @@ rm documentation/images/dfs-comic.png
 # fedora 25
 %pom_remove_plugin :maven-source-plugin code
 
-%mvn_file :%{name} %{name}
+%mvn_file :%{pkg_name} %{pkg_name}
+%{?scl_disable}
 
 %build
-
+%{?scl_enable}
 %mvn_build -- -f code/pom.xml 
+%{?scl_disable}
 
 %install
+%{?scl_enable}
 %mvn_install
+%{?scl_disable}
 
 %files -f .mfiles
 %doc README.md documentation/
@@ -52,6 +61,9 @@ rm documentation/images/dfs-comic.png
 %license LICENSE.txt
 
 %changelog
+* Tue Aug 09 2016 Tomas Repik <trepik@redhat.com> - 2.5.0-3
+- scl conversion
+
 * Tue Jun 21 2016 Tomas Repik <trepik@redhat.com> - 2.5.0-2
 - remove maven-source-plugin causing failure
 
